@@ -55,39 +55,48 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+locals {
+  tcp_ports = {
+    ssh = 22
+    k8s = 6443
+    web = 80
+    ssl = 443
+    hcm = 55671
+  }
+  udp_ports = {
+    snmp       = 161
+    snmp_trap  = 162
+  }
+}
+
 resource "aws_security_group" "allow_access" {
   name        = "${var.instance_name}-sg"
-  description = "Allow SSH, HTTP and Kubernetes API access"
+  description = "Allow SSH, HTTP, K8s API, HCM (TCP) and SNMP (UDP)"
   vpc_id      = data.aws_vpc.default.id
 
+  # TCP-Regeln
   dynamic "ingress" {
-    for_each = {
-      ssh  = 22
-      k8s  = 6443
-      web  = 80
-      ssl  = 443
-      hcm = 55671
-      snmp = 161
-      snmp_trap = 162
-    }
-
+    for_each = local.tcp_ports
     content {
       description = ingress.key
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
-      cidr_blocks = var.ssh_allowed_cidrs
+      cidr_blocks = var.allowed_cidrs
     }
   }
 
-  # # NodePort-Range für Kubernetes (30000–32767)
-  # ingress {
-  #   description = "k8s-nodeport-range"
-  #   from_port   = 30000
-  #   to_port     = 32767
-  #   protocol    = "tcp"
-  #   cidr_blocks = var.ssh_allowed_cidrs
-  # }
+  # UDP-Regeln (SNMP)
+  dynamic "ingress" {
+    for_each = local.udp_ports
+    content {
+      description = ingress.key
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "udp"
+      cidr_blocks = var.allowed_cidrs
+    }
+  }
 
   egress {
     from_port   = 0
@@ -96,6 +105,7 @@ resource "aws_security_group" "allow_access" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
 
 # Create key pair from a local public key file
 resource "aws_key_pair" "ssh_key" {
@@ -128,6 +138,7 @@ resource "aws_instance" "my_ec2_instance" {
 
   tags = {
     Name = var.instance_name
+    Role = var.role
   }
 }
 

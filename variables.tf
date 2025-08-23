@@ -39,8 +39,8 @@ variable "public_key_path" {
   default     = "./id_rsa.pub"
 }
 
-variable "ssh_allowed_cidrs" {
-  description = "Liste der CIDRs, die SSH-Zugriff haben"
+variable "allowed_cidrs" {
+  description = "Liste der CIDRs, die Zugriff haben"
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
@@ -48,13 +48,18 @@ variable "ssh_allowed_cidrs" {
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
-  default     = "t3.medium"
+  default     = "t2.2xlarge"
 }
 
 variable "instance_name" {
   description = "Tag für die Instanz"
   type        = string
   default     = "UbuntuLatest"
+}
+
+variable "role" {
+  description = "Rolle der Instanz (frontend, backend, db, ...)"
+  type        = string
 }
 
 variable "root_disk_size" {
