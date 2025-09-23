@@ -1,12 +1,3 @@
-# terraform {
-#   cloud {
-#     organization = "cayo-org"
-#     workspaces {
-#       name = "TEST"
-#     }
-#   }
-# }
-
 terraform {
   required_providers {
     turbonomic = {
@@ -61,6 +52,7 @@ locals {
     k8s = 6443
     web = 80
     ssl = 443
+    kubecost = 9090
     hcm = 55671
   }
   udp_ports = {
