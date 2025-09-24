@@ -1,5 +1,9 @@
 terraform {
   required_providers {
+    vault = {
+      source = "hashicorp/vault"
+      version = "5.3.0"
+    }
     turbonomic = {
       source  = "IBM/turbonomic"
       version = "1.0.2"
@@ -11,17 +15,35 @@ terraform {
   }
 }
 
+provider "vault" {
+  address = var.vault_url
+  namespace = "admin"
+
+  auth_login {
+    path = "auth/approle/login"
+    parameters = {
+      role_id   = var.vault_role_id
+      secret_id = var.vault_secret_id
+    }
+  }
+}
+
+data "vault_kv_secret_v2" "mysecret" {
+  mount = "secret"
+  name  = "secrets"
+}
+
 provider "turbonomic" {
   username   = var.turbonomic_username
-  password   = var.turbonomic_password
-  hostname   = var.turbonomic_hostname
+  password   = data.vault_kv_secret_v2.mysecret.data["turbonomic_password"]
+  hostname   = data.vault_kv_secret_v2.mysecret.data["turbonomic_hostname"]
   skipverify = true
 }
 
 provider "aws" {
   region     = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  access_key = data.vault_kv_secret_v2.mysecret.data["aws_access_key"]
+  secret_key = data.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
 }
 
 # Use default VPC
@@ -102,7 +124,7 @@ resource "aws_security_group" "allow_access" {
 # Create key pair from a local public key file
 resource "aws_key_pair" "ssh_key" {
   key_name   = "${var.instance_name}-ssh"
-  public_key = file(var.public_key_path)
+  public_key = data.vault_kv_secret_v2.mysecret.data["ssh_public_key"]
 }
 
 data "turbonomic_cloud_entity_recommendation" "example" {
@@ -113,7 +135,6 @@ data "turbonomic_cloud_entity_recommendation" "example" {
 # EC2 instance
 resource "aws_instance" "my_ec2_instance" {
   ami                    = data.aws_ami.ubuntu.id
-  # instance_type          = var.instance_type
   instance_type = (
     data.turbonomic_cloud_entity_recommendation.example.new_instance_type != null
     ? data.turbonomic_cloud_entity_recommendation.example.new_instance_type
@@ -138,4 +159,21 @@ resource "aws_instance" "my_ec2_instance" {
 output "instance_ip" {
   description = "Die öffentliche IP-Adresse der EC2-Instanz"
   value       = aws_instance.my_ec2_instance.public_ip
+}
+
+output "turbonomic_hostname" {
+  value = data.vault_kv_secret_v2.mysecret.data["turbonomic_hostname"]
+  sensitive = true
+}
+output "turbonomic_password" {
+  value = data.vault_kv_secret_v2.mysecret.data["turbonomic_password"]
+  sensitive = true
+}
+output "aws_access_key" {
+  value = data.vault_kv_secret_v2.mysecret.data["aws_access_key"]
+  sensitive = true
+}
+output "aws_secret_key" {
+  value = data.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
+  sensitive = true
 }
