@@ -1,36 +1,7 @@
-variable "turbonomic_hostname" {
-  description = "Turbonomic URL"
-  type        = string
-}
-
-variable "turbonomic_password" {
-  description = "Turbonomic User Password"
-  type        = string
-  sensitive   = true
-}
-
-variable "turbonomic_username" {
-  description = "Turbonomic Login User"
-  type        = string
-  default     = "administrator"
-}
-
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "eu-central-1"
-}
-
-variable "aws_access_key" {
-  description = "AWS Access Key"
-  type        = string
-  sensitive   = true
-}
-
-variable "aws_secret_key" {
-  description = "AWS Secret Key"
-  type        = string
-  sensitive   = true
 }
 
 variable "public_key_path" {
@@ -66,4 +37,19 @@ variable "root_disk_size" {
   description = "Disk size"
   type        = number
   default     = 100
+}
+
+variable "vault_url" {
+  description = "HashiCorp Vault URL"
+  type        = string
+}
+
+variable "vault_role_id" {
+  description = "HashiCorp Vault Role ID"
+  type        = string
+}
+
+variable "vault_secret_id" {
+  description = "HashiCorp Vault Secret ID"
+  type        = string
 }
