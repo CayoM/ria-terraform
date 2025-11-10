@@ -139,12 +139,3 @@ output "instance_ip" {
   description = "Die öffentliche IP-Adresse der EC2-Instanz"
   value       = aws_instance.my_ec2_instance.public_ip
 }
-
-output "aws_access_key" {
-  value = data.vault_kv_secret_v2.mysecret.data["aws_access_key"]
-  sensitive = true
-}
-output "aws_secret_key" {
-  value = data.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
-  sensitive = true
-}

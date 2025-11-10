@@ -56,18 +56,3 @@ variable "root_disk_size" {
   type        = number
   default     = 100
 }
-
-variable "vault_url" {
-  description = "HashiCorp Vault URL"
-  type        = string
-}
-
-variable "vault_role_id" {
-  description = "HashiCorp Vault Role ID"
-  type        = string
-}
-
-variable "vault_secret_id" {
-  description = "HashiCorp Vault Secret ID"
-  type        = string
-}
