@@ -12,15 +12,13 @@ terraform {
 }
 
 provider "vault" {
-  address = var.vault_url
-  namespace = "admin"
+  // skip_child_token must be explicitly set to true as HCP Terraform manages the token lifecycle
+  skip_child_token = true
+  address          = var.tfc_vault_dynamic_credentials.default.address
+  namespace        = var.tfc_vault_dynamic_credentials.default.namespace
 
-  auth_login {
-    path = "auth/approle/login"
-    parameters = {
-      role_id   = var.vault_role_id
-      secret_id = var.vault_secret_id
-    }
+  auth_login_token_file {
+    filename = var.tfc_vault_dynamic_credentials.default.token_filename
   }
 }
 
