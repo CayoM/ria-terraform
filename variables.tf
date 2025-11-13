@@ -31,6 +31,7 @@ variable "instance_name" {
 variable "role" {
   description = "Rolle der Instanz (frontend, backend, db, ...)"
   type        = string
+  default     = "frontend"
 }
 
 variable "root_disk_size" {
