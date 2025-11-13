@@ -53,3 +53,74 @@ variable "vault_secret_id" {
   description = "HashiCorp Vault Secret ID"
   type        = string
 }
+
+### AAP ###
+variable "aap_org_name" {
+  description = "Name of the Organization in AAP/AWX"
+  type        = string
+  default     = "Default"
+}
+
+variable "aap_job_template_name" {
+  description = "Name of the Job Template in AAP/AWX"
+  type        = string
+  default     = "setup-ec2-instance-automated"
+}
+
+variable "aap_inventory_name" {
+  description = "Name of the Inventory in AAP/AWX"
+  type        = string
+  default     = "Demo Inventory"
+}
+###########
+
+### Ansible vars ###
+variable "ansible_var_port" {
+  type        = number
+  default     = 22
+}
+
+variable "ansible_var_location" {
+  type        = string
+  default     = "south"
+}
+
+variable "ansible_var_remote_user" {
+  type        = string
+  default     = "ubuntu"
+}
+
+variable "ansible_var_feature_kubecost" {
+  type        = bool
+  default     = false
+}
+
+variable "ansible_var_feature_instana" {
+  type        = bool
+  default     = false
+}
+
+variable "ansible_var_feature_sevone" {
+  type        = bool
+  default     = false
+}
+
+variable "ansible_var_feature_turbonomic" {
+  type        = bool
+  default     = false
+}
+
+variable "ansible_var_feature_hcm" {
+  type        = bool
+  default     = false
+}
+
+variable "ansible_var_cloud_provider" {
+  type        = string
+  default     = "AWS"
+}
+
+variable "ansible_var_app_name" {
+  type        = string
+  default     = "robotshop"
+}

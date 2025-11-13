@@ -8,6 +8,10 @@ terraform {
       source = "hashicorp/aws"
       version = "6.0.0-beta2"
     }
+    aap = {
+      source = "ansible/aap"
+      version = "1.4.0-devpreview1"
+    }
   }
 }
 
@@ -24,6 +28,11 @@ provider "vault" {
   }
 }
 
+ephemeral "vault_kv_secret_v2" "mysecret" {
+  mount = "secret"
+  name  = "secrets"
+}
+
 data "vault_kv_secret_v2" "mysecret" {
   mount = "secret"
   name  = "secrets"
@@ -31,9 +40,16 @@ data "vault_kv_secret_v2" "mysecret" {
 
 provider "aws" {
   region     = var.aws_region
-  access_key = data.vault_kv_secret_v2.mysecret.data["aws_access_key"]
-  secret_key = data.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
+  access_key = ephemeral.vault_kv_secret_v2.mysecret.data["aws_access_key"]
+  secret_key = ephemeral.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
 }
+
+provider "aap" {
+  host     = "https://${ephemeral.vault_kv_secret_v2.mysecret.data["awx_url"]}"
+  username = "admin"
+  password = ephemeral.vault_kv_secret_v2.mysecret.data["awx_admin_password"]
+}
+
 
 # Use default VPC
 data "aws_vpc" "default" {
@@ -136,17 +152,45 @@ resource "aws_instance" "my_ec2_instance" {
   }
 }
 
+data "aap_inventory" "my_inventory" {
+  name              = var.aap_inventory_name
+  organization_name = var.aap_org_name
+}
+
+data "aap_job_template" "demo_job_template" {
+  name              = var.aap_job_template_name
+  organization_name = var.aap_org_name
+}
+
+resource "aap_job" "demo_job" {
+  job_template_id = data.aap_job_template.demo_job_template.id
+  inventory_id    = data.aap_inventory.my_inventory.id
+  extra_vars      = yamlencode({ 
+    "ec2_ip" : aws_instance.my_ec2_instance.public_ip,
+    "instana_agent_key": data.vault_kv_secret_v2.mysecret.data["instana_agent_key"],
+    "registry_pwd": data.vault_kv_secret_v2.mysecret.data["pull_secret"],
+    "mesh_api_key": data.vault_kv_secret_v2.mysecret.data["hcm_mesh_api_key"],
+    "instance_name": var.instance_name,
+    "service_type": var.role,
+    "location": var.ansible_var_location,
+    "ansible_port": var.ansible_var_port,
+    "remote_user": var.ansible_var_remote_user,
+    "feature_kubecost": var.ansible_var_feature_kubecost,
+    "feature_instana": var.ansible_var_feature_instana,
+    "feature_sevone": var.ansible_var_feature_sevone,
+    "feature_turbonomic": var.ansible_var_feature_turbonomic,
+    "feature_hcm": var.ansible_var_feature_hcm,
+    "app_name": var.ansible_var_app_name,
+    "cloud_provider": var.ansible_var_cloud_provider
+    })
+  triggers = {
+    instance_type = aws_instance.my_ec2_instance.instance_type
+  }
+}
+
+
 # Output public IP
 output "instance_ip" {
   description = "Die öffentliche IP-Adresse der EC2-Instanz"
   value       = aws_instance.my_ec2_instance.public_ip
-}
-
-output "aws_access_key" {
-  value = data.vault_kv_secret_v2.mysecret.data["aws_access_key"]
-  sensitive = true
-}
-output "aws_secret_key" {
-  value = data.vault_kv_secret_v2.mysecret.data["aws_secret_key"]
-  sensitive = true
 }
