@@ -197,7 +197,6 @@ resource "aap_job" "demo_job" {
     "feature_kubecost": var.ansible_var_feature_kubecost,
     "feature_instana": var.ansible_var_feature_instana,
     "feature_sevone": var.ansible_var_feature_sevone,
-    "feature_turbonomic": var.ansible_var_feature_turbonomic,
     "feature_hcm": var.ansible_var_feature_hcm,
     "app_name": var.ansible_var_app_name,
     "cloud_provider": var.ansible_var_cloud_provider
