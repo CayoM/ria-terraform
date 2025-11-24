@@ -213,9 +213,3 @@ output "instance_ip" {
   description = "Die öffentliche IP-Adresse der EC2-Instanz"
   value       = aws_instance.my_ec2_instance.public_ip
 }
-
-# Output AAP Job ID
-output "aap_job_id" {
-  description = "AAP Job ID from triggered Job Template"
-  value       = aap_job.demo_job.id
-}
