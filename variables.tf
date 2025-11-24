@@ -106,11 +106,6 @@ variable "ansible_var_feature_sevone" {
   default     = false
 }
 
-variable "ansible_var_feature_turbonomic" {
-  type        = bool
-  default     = true
-}
-
 variable "ansible_var_feature_hcm" {
   type        = bool
   default     = false
