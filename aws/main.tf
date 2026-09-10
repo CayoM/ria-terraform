@@ -150,11 +150,8 @@ data "turbonomic_cloud_entity_recommendation" "example" {
 # EC2 instance
 resource "aws_instance" "my_ec2_instance" {
   ami = data.aws_ami.ubuntu.id
-  instance_type = (
-    data.turbonomic_cloud_entity_recommendation.example.new_instance_type != null
-    ? data.turbonomic_cloud_entity_recommendation.example.new_instance_type
-    : var.instance_type
-  )
+  # coalesce() statt != null, da Turbonomic für eine nicht gefundene Entity "" statt null liefert
+  instance_type = coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, var.instance_type)
 
   key_name               = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.allow_access.id]

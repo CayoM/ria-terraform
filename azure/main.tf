@@ -183,11 +183,8 @@ resource "azurerm_linux_virtual_machine" "my_vm_instance" {
   name                = var.instance_name
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size = (
-    data.turbonomic_cloud_entity_recommendation.example.new_instance_type != null
-    ? data.turbonomic_cloud_entity_recommendation.example.new_instance_type
-    : var.instance_type
-  )
+  # coalesce() statt != null, da Turbonomic für eine nicht gefundene Entity "" statt null liefert
+  size = coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, var.instance_type)
 
   admin_username                  = "ubuntu"
   disable_password_authentication = true
