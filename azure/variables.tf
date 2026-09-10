@@ -81,11 +81,6 @@ variable "ansible_var_port" {
   default = 22
 }
 
-variable "ansible_var_location" {
-  type    = string
-  default = "south"
-}
-
 variable "ansible_var_remote_user" {
   type    = string
   default = "ubuntu"
