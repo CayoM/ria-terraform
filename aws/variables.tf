@@ -100,9 +100,9 @@ variable "ansible_var_feature_sevone" {
   default = false
 }
 
-variable "ansible_var_feature_hcm" {
+variable "ansible_var_feature_turbonomic" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "ansible_var_cloud_provider" {
