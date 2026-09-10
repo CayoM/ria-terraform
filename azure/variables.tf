@@ -3,29 +3,23 @@ variable "tfc_vault_dynamic_credentials" {
   type = object({
     default = object({
       token_filename = string
-      address = string
-      namespace = string
-      ca_cert_file = string
+      address        = string
+      namespace      = string
+      ca_cert_file   = string
     })
     aliases = map(object({
       token_filename = string
-      address = string
-      namespace = string
-      ca_cert_file = string
+      address        = string
+      namespace      = string
+      ca_cert_file   = string
     }))
   })
 }
 
-variable "aws_region" {
-  description = "AWS Region"
+variable "azure_location" {
+  description = "Azure Region"
   type        = string
-  default     = "eu-central-1"
-}
-
-variable "public_key_path" {
-  description = "Pfad zur lokalen SSH Public Key Datei"
-  type        = string
-  default     = "./id_rsa.pub"
+  default     = "westeurope"
 }
 
 variable "allowed_cidrs" {
@@ -35,9 +29,9 @@ variable "allowed_cidrs" {
 }
 
 variable "instance_type" {
-  description = "EC2 Instance Type"
+  description = "Azure VM Size – Name bewusst wie im AWS-Pendant beibehalten, da AAP/Ansible diesen Variablennamen referenzieren"
   type        = string
-  default     = "t2.2xlarge"
+  default     = "Standard_D8s_v3"
 }
 
 variable "instance_name" {

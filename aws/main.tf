@@ -1,11 +1,11 @@
 terraform {
   required_providers {
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "5.3.0"
     }
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "6.0.0-beta2"
     }
   }
@@ -49,17 +49,17 @@ data "aws_ami" "ubuntu" {
 
 locals {
   tcp_ports = {
-    ssh = 22
-    k8s = 6443
-    web = 80
-    ssl = 443
+    ssh      = 22
+    k8s      = 6443
+    web      = 80
+    ssl      = 443
     kubecost = 9090
-    hcm = 55671
+    hcm      = 55671
     frontend = 30080
   }
   udp_ports = {
-    snmp       = 161
-    snmp_trap  = 162
+    snmp      = 161
+    snmp_trap = 162
   }
 }
 
@@ -109,8 +109,8 @@ resource "aws_key_pair" "ssh_key" {
 
 # EC2 instance
 resource "aws_instance" "my_ec2_instance" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.instance_type
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
 
   key_name               = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.allow_access.id]
