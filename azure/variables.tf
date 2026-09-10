@@ -1,7 +1,7 @@
 variable "azure_location" {
   description = "Azure Region"
   type        = string
-  default     = "westeurope"
+  default     = "germanywestcentral"
 }
 
 variable "allowed_cidrs" {
