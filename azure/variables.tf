@@ -1,7 +1,7 @@
 variable "azure_location" {
   description = "Azure Region"
   type        = string
-  default     = "northeurope"
+  default     = "westus3"
 }
 
 variable "allowed_cidrs" {
@@ -13,7 +13,7 @@ variable "allowed_cidrs" {
 variable "instance_type" {
   description = "Azure VM Size – Name bewusst wie im AWS-Pendant beibehalten, da AAP/Ansible diesen Variablennamen referenzieren"
   type        = string
-  default     = "Standard_D4s_v3"
+  default     = "Standard_D4ads_v6"
 }
 
 variable "instance_name" {
