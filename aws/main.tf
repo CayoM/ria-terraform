@@ -54,7 +54,6 @@ locals {
     web      = 80
     ssl      = 443
     kubecost = 9090
-    hcm      = 55671
     frontend = 30080
   }
   udp_ports = {
@@ -65,7 +64,7 @@ locals {
 
 resource "aws_security_group" "allow_access" {
   name        = "${var.instance_name}-sg"
-  description = "Allow SSH, HTTP, K8s API, HCM (TCP) and SNMP (UDP)"
+  description = "Allow SSH, HTTP, K8s API (TCP) and SNMP (UDP)"
   vpc_id      = data.aws_vpc.default.id
 
   # TCP-Regeln

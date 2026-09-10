@@ -55,7 +55,6 @@ locals {
     web      = 80
     ssl      = 443
     kubecost = 9090
-    hcm      = 55671
     frontend = 30080
   }
   udp_ports = {
