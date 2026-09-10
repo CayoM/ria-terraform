@@ -91,7 +91,6 @@ locals {
     web      = 80
     ssl      = 443
     kubecost = 9090
-    hcm      = 55671
     frontend = 30080
   }
   udp_ports = {
@@ -236,7 +235,6 @@ resource "aap_job" "demo_job" {
     "ec2_ip" : azurerm_public_ip.main.ip_address,
     "instana_agent_key" : data.vault_kv_secret_v2.mysecret.data["instana_agent_key"],
     "registry_pwd" : data.vault_kv_secret_v2.mysecret.data["pull_secret"],
-    "mesh_api_key" : data.vault_kv_secret_v2.mysecret.data["hcm_mesh_api_key"],
     "instance_name" : var.instance_name,
     "service_type" : var.role,
     "ansible_port" : var.ansible_var_port,
@@ -244,7 +242,7 @@ resource "aap_job" "demo_job" {
     "feature_kubecost" : var.ansible_var_feature_kubecost,
     "feature_instana" : var.ansible_var_feature_instana,
     "feature_sevone" : var.ansible_var_feature_sevone,
-    "feature_hcm" : var.ansible_var_feature_hcm,
+    "feature_turbonomic" : var.ansible_var_feature_turbonomic,
     "app_name" : var.ansible_var_app_name,
     "cloud_provider" : var.ansible_var_cloud_provider
   })
