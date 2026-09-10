@@ -216,7 +216,6 @@ resource "aap_job" "demo_job" {
     "mesh_api_key" : data.vault_kv_secret_v2.mysecret.data["hcm_mesh_api_key"],
     "instance_name" : var.instance_name,
     "service_type" : var.role,
-    "location" : var.ansible_var_location,
     "ansible_port" : var.ansible_var_port,
     "remote_user" : var.ansible_var_remote_user,
     "feature_kubecost" : var.ansible_var_feature_kubecost,
