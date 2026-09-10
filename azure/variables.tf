@@ -4,10 +4,10 @@ variable "turbonomic_username" {
   default     = "administrator"
 }
 
-variable "aws_region" {
-  description = "AWS Region"
+variable "azure_location" {
+  description = "Azure Region"
   type        = string
-  default     = "eu-central-1"
+  default     = "westeurope"
 }
 
 variable "allowed_cidrs" {
@@ -17,9 +17,9 @@ variable "allowed_cidrs" {
 }
 
 variable "instance_type" {
-  description = "EC2 Instance Type"
+  description = "Azure VM Size – Name bewusst wie im AWS-Pendant beibehalten, da AAP/Ansible diesen Variablennamen referenzieren"
   type        = string
-  default     = "t2.2xlarge"
+  default     = "Standard_D8s_v3"
 }
 
 variable "instance_name" {
@@ -77,46 +77,46 @@ variable "aap_inventory_name" {
 
 ### Ansible vars ###
 variable "ansible_var_port" {
-  type        = number
-  default     = 22
+  type    = number
+  default = 22
 }
 
 variable "ansible_var_location" {
-  type        = string
-  default     = "south"
+  type    = string
+  default = "south"
 }
 
 variable "ansible_var_remote_user" {
-  type        = string
-  default     = "ubuntu"
+  type    = string
+  default = "ubuntu"
 }
 
 variable "ansible_var_feature_kubecost" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "ansible_var_feature_instana" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "ansible_var_feature_sevone" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "ansible_var_feature_hcm" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "ansible_var_cloud_provider" {
-  type        = string
-  default     = "AWS"
+  type    = string
+  default = "Azure"
 }
 
 variable "ansible_var_app_name" {
-  type        = string
-  default     = "robotshop"
+  type    = string
+  default = "robotshop"
 }
