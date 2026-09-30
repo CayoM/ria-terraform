@@ -34,10 +34,15 @@ variable "allowed_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "instance_type" {
-  description = "EC2 Instance Type"
+variable "environment_type" {
+  description = "Umgebungstyp des Deployments (PROD, DEV, INT, STAGE) - wird als Tag gesetzt"
   type        = string
-  default     = "t2.2xlarge"
+  default     = "DEV"
+
+  validation {
+    condition     = contains(["PROD", "DEV", "INT", "STAGE"], var.environment_type)
+    error_message = "environment_type muss PROD, DEV, INT oder STAGE sein."
+  }
 }
 
 variable "instance_name" {

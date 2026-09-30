@@ -120,8 +120,9 @@ resource "aws_instance" "my_ec2_instance" {
   }
 
   tags = {
-    Name = var.instance_name
-    Role = var.role
+    Name        = var.instance_name
+    Role        = var.role
+    Environment = var.environment_type
   }
 }
 

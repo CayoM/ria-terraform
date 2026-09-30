@@ -164,8 +164,9 @@ resource "azurerm_linux_virtual_machine" "my_vm_instance" {
   }
 
   tags = {
-    Name = var.instance_name
-    Role = var.role
+    Name        = var.instance_name
+    Role        = var.role
+    Environment = var.environment_type
   }
 }
 

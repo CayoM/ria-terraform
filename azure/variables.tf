@@ -28,10 +28,15 @@ variable "allowed_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "instance_type" {
-  description = "Azure VM Size – Name bewusst wie im AWS-Pendant beibehalten, da AAP/Ansible diesen Variablennamen referenzieren"
+variable "environment_type" {
+  description = "Umgebungstyp des Deployments (PROD, DEV, INT, STAGE) - wird als Tag gesetzt"
   type        = string
-  default     = "Standard_D4ads_v6"
+  default     = "DEV"
+
+  validation {
+    condition     = contains(["PROD", "DEV", "INT", "STAGE"], var.environment_type)
+    error_message = "environment_type muss PROD, DEV, INT oder STAGE sein."
+  }
 }
 
 variable "instance_name" {
