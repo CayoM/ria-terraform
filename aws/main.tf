@@ -146,8 +146,9 @@ resource "aws_instance" "my_ec2_instance" {
   }
 
   tags = {
-    Name = var.instance_name
-    Role = var.role
+    Name        = var.instance_name
+    Role        = var.role
+    Environment = var.environment_type
   }
 }
 
@@ -180,7 +181,7 @@ resource "aap_job" "demo_job" {
     "cloud_provider" : var.ansible_var_cloud_provider
   })
   triggers = {
-    instance_type = aws_instance.my_ec2_instance.instance_type
+    instance_size = aws_instance.my_ec2_instance.instance_type
   }
 }
 

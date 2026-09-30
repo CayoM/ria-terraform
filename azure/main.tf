@@ -189,8 +189,9 @@ resource "azurerm_linux_virtual_machine" "my_vm_instance" {
   }
 
   tags = {
-    Name = var.instance_name
-    Role = var.role
+    Name        = var.instance_name
+    Role        = var.role
+    Environment = var.environment_type
   }
 }
 
@@ -224,7 +225,7 @@ resource "aap_job" "demo_job" {
     "cloud_provider" : var.ansible_var_cloud_provider
   })
   triggers = {
-    instance_type = azurerm_linux_virtual_machine.my_vm_instance.size
+    instance_size = azurerm_linux_virtual_machine.my_vm_instance.size
   }
 }
 
