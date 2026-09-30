@@ -135,7 +135,7 @@ resource "aws_key_pair" "ssh_key" {
 # EC2 instance
 resource "aws_instance" "my_ec2_instance" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
+  instance_type = local.ec2_instance_type
 
   key_name               = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.allow_access.id]

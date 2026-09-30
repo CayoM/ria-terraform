@@ -164,7 +164,7 @@ resource "azurerm_linux_virtual_machine" "my_vm_instance" {
   name                = var.instance_name
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size                = var.instance_type
+  size                = local.vm_size
 
   admin_username                  = "ubuntu"
   disable_password_authentication = true
